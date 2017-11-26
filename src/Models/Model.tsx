@@ -1,7 +1,7 @@
 import { Decortors } from '../RickyValidation/Decortors';
 
 export class Model {
-    @Decortors.required({ errorMsg: () => "Function Error" })
+    @Decortors.required({ errorMsg: () => 'Function Error' })
     public qq: string = ''; // 一定要給初始值，js原生物件上，field若不給值，不會有這一個欄位，會無法驗證
 
     private _name: string = '';

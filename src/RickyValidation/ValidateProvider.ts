@@ -27,9 +27,9 @@ export class DefaultProvider implements IValidateProvider {
                 return true;
             }
             if (typeof paramsModel.errorMsg === 'function') {
-                this._errorSummary.push(<string>paramsModel.errorMsg())
-            }else{
-                this._errorSummary.push(<string>paramsModel.errorMsg)
+                this._errorSummary.push(<string> paramsModel.errorMsg());
+            } else {
+                this._errorSummary.push(<string> paramsModel.errorMsg);
             }
             return false;
         }

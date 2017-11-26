@@ -1,11 +1,10 @@
 import 'reflect-metadata';
-import { requiredMetadataKey, emailMetadataKey } from './Consts';
 
 /**
  * 裝飾器
  */
 export module Decortors {
-    type StringFunction = () => string
+    type StringFunction = () => string;
     export class _baseDecortorsModel {
         errorMsg?: string | StringFunction;
     }
@@ -17,7 +16,7 @@ export module Decortors {
      * @param model 參數
      */
     export function required(model: RequiredModel = { errorMsg: 'Can\'t emtpy', allowEmpty: false }) {
-        let resultModel = Reflect.metadata(requiredMetadataKey, model);
+        let resultModel = Reflect.metadata('required', model); //需與provider handler前命名一致，因為呼叫是使用 (name + 'handler')()
         return resultModel;
     }
     /**
@@ -25,10 +24,7 @@ export module Decortors {
      * @param model 參數
      */
     export function email(model: _baseDecortorsModel = { errorMsg: 'Can\'t emtpy' }) {
-        let resultModel = Reflect.metadata(emailMetadataKey, model);
+        let resultModel = Reflect.metadata('email', model); //需與provider handler前命名一致，因為呼叫是使用 (name + 'handler')()
         return resultModel;
-    }
-    export function logMethod(target: any, key: any, descriptor: any) {
-        return descriptor;
     }
 }

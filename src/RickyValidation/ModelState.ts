@@ -1,5 +1,5 @@
 import { IValidateProvider, DefaultProvider } from './ValidateProvider';
-import { valueType, factory } from './Consts';
+import { valueType } from './Consts';
 
 export class ModelState<T> {
     private _isValid: boolean = true;
@@ -46,24 +46,17 @@ export class ModelState<T> {
     private isValidate(target: T, propertyKey: string): boolean {
 
         let result: boolean = true;
+        let factory = Reflect.getMetadataKeys(target, propertyKey);
         for (let decortor in factory) {
-            let metaData = this.getMetadata(factory[decortor], target, propertyKey);
-            let value: valueType = Reflect.get(<Object>target, propertyKey);
-            if (metaData) {
-                if(!this._provider[factory[decortor] + 'Handler'](value, metaData)){ result = false;}
+            if (factory[decortor]) {
+                let metaData = this.getMetadata(factory[decortor], target, propertyKey);
+                let value: valueType = Reflect.get(<Object> target, propertyKey);
+                if (metaData) {
+                    if (!this._provider[factory[decortor] + 'Handler'](value, metaData)) { result = false; }
+                }
             }
         }
         return result;
-        // let requiredMetaData = this.getMetadata(requiredMetadataKey, target, propertyKey);
-        // if (requiredMetaData) {
-        //     let value: valueType = Reflect.get(<Object> target, propertyKey);
-        //     return this._provider.validRequiredHandler(value, requiredMetaData);
-        // }
-        // let emailMetadata = this.getMetadata(emailMetadataKey, target, propertyKey);
-        // if (emailMetadata) {
-        //     return true;
-        // }
-        // return true;
     }
 
     // 取得標籤及內容
