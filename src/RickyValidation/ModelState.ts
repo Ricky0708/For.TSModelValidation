@@ -1,6 +1,6 @@
 import { IValidateProvider, DefaultProvider } from './ValidateProvider';
 import { Decortors } from './Decortors';
-import { requiredMetadataKey, valueType } from './Consts';
+import { requiredMetadataKey, valueType, emailMetadataKey } from './Consts';
 
 
 export class ModelState<T> {
@@ -44,19 +44,21 @@ export class ModelState<T> {
 
     // 工廠驗證
     private isValidate(target: T, propertyKey: string): boolean {
-        let requiredMetaData = this.getRequiredMetadata(target, propertyKey);
+        let requiredMetaData = this.getMetadata(requiredMetadataKey, target, propertyKey);
         if (requiredMetaData) {
             let value: valueType = Reflect.get(<Object>target, propertyKey);
             return this._provider.validRequiredHandler(value, requiredMetaData.allowEmpty);
         }
-
+        let emailMetadata = this.getMetadata(emailMetadataKey, target, propertyKey);
+        if (emailMetadata) {
+        }
         return true;
     }
 
-    // 取得標籤及內容
-    private getRequiredMetadata = (target: T, propertyKey: string): Decortors.RequiredModel => {
-        let requiredMetaData: Decortors.RequiredModel =
-            Reflect.getMetadata(requiredMetadataKey, target, propertyKey);
-        return requiredMetaData;
+    // 取得不可標籤及內容
+    private getMetadata = (metadataKey: symbol, target: T, propertyKey: string): Decortors.RequiredModel => {
+        let metaData: Decortors.RequiredModel =
+            Reflect.getMetadata(metadataKey, target, propertyKey);
+        return metaData;
     }
 }
