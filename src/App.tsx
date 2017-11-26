@@ -14,6 +14,7 @@ class App extends React.Component {
     let q = new ModelState(Model);
     a.name = 'ds';
     console.log(q.isValid(a));
+    console.log(q.getErrorSummary());
   }
   render() {
     return (

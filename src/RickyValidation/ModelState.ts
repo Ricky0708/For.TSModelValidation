@@ -1,7 +1,5 @@
 import { IValidateProvider, DefaultProvider } from './ValidateProvider';
-import { Decortors } from './Decortors';
-import { requiredMetadataKey, valueType, emailMetadataKey } from './Consts';
-
+import { valueType, factory } from './Consts';
 
 export class ModelState<T> {
     private _isValid: boolean = true;
@@ -41,23 +39,37 @@ export class ModelState<T> {
         }
         return this._isValid;
     }
-
+    public getErrorSummary(): string[] {
+        return this._provider.errorSummary;
+    }
     // 工廠驗證
     private isValidate(target: T, propertyKey: string): boolean {
-        let requiredMetaData = this.getMetadata(requiredMetadataKey, target, propertyKey);
-        if (requiredMetaData) {
+
+        let result: boolean = true;
+        for (let decortor in factory) {
+            let metaData = this.getMetadata(factory[decortor], target, propertyKey);
             let value: valueType = Reflect.get(<Object>target, propertyKey);
-            return this._provider.validRequiredHandler(value, requiredMetaData.allowEmpty);
+            console.log(metaData);
+            if (metaData) {
+                if(!this._provider[factory[decortor] + 'Handler'](value, metaData)){ result = false;}
+            }
         }
-        let emailMetadata = this.getMetadata(emailMetadataKey, target, propertyKey);
-        if (emailMetadata) {
-        }
-        return true;
+        return result;
+        // let requiredMetaData = this.getMetadata(requiredMetadataKey, target, propertyKey);
+        // if (requiredMetaData) {
+        //     let value: valueType = Reflect.get(<Object> target, propertyKey);
+        //     return this._provider.validRequiredHandler(value, requiredMetaData);
+        // }
+        // let emailMetadata = this.getMetadata(emailMetadataKey, target, propertyKey);
+        // if (emailMetadata) {
+        //     return true;
+        // }
+        // return true;
     }
 
-    // 取得不可標籤及內容
-    private getMetadata = (metadataKey: symbol, target: T, propertyKey: string): Decortors.RequiredModel => {
-        let metaData: Decortors.RequiredModel =
+    // 取得標籤及內容
+    private getMetadata = (metadataKey: string, target: T, propertyKey: string) => {
+        let metaData =
             Reflect.getMetadata(metadataKey, target, propertyKey);
         return metaData;
     }

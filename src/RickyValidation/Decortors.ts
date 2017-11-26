@@ -5,10 +5,11 @@ import { requiredMetadataKey, emailMetadataKey } from './Consts';
  * 裝飾器
  */
 export module Decortors {
-    export class baseDecortorsModel{
-        errorMsg?: string;
+    type StringFunction = () => string
+    export class _baseDecortorsModel {
+        errorMsg?: string | StringFunction;
     }
-    export class RequiredModel extends baseDecortorsModel {
+    export class RequiredModel extends _baseDecortorsModel {
         allowEmpty?: boolean;
     }
     /**
@@ -19,12 +20,13 @@ export module Decortors {
         let resultModel = Reflect.metadata(requiredMetadataKey, model);
         return resultModel;
     }
-     /**
+    /**
      * email裝飾器
      * @param model 參數
      */
-    export function email(model: baseDecortorsModel = {errorMsg: 'Can\'t emtpy'}) {
+    export function email(model: _baseDecortorsModel = { errorMsg: 'Can\'t emtpy' }) {
         let resultModel = Reflect.metadata(emailMetadataKey, model);
         return resultModel;
     }
+  
 }
