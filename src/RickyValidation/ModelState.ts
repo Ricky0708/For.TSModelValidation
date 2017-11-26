@@ -49,7 +49,6 @@ export class ModelState<T> {
         for (let decortor in factory) {
             let metaData = this.getMetadata(factory[decortor], target, propertyKey);
             let value: valueType = Reflect.get(<Object>target, propertyKey);
-            console.log(metaData);
             if (metaData) {
                 if(!this._provider[factory[decortor] + 'Handler'](value, metaData)){ result = false;}
             }

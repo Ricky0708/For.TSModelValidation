@@ -13,6 +13,7 @@ class App extends React.Component {
     let a: Model = new Model();
     let q = new ModelState(Model);
     a.name = 'ds';
+    a.email ='df';
     console.log(q.isValid(a));
     console.log(q.getErrorSummary());
   }

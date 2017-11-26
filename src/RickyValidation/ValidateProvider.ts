@@ -21,11 +21,6 @@ export class DefaultProvider implements IValidateProvider {
         return this._errorSummary;
     }
 
-
-    emailHandler(value: valueType, paramsModel: Decortors.RequiredModel): boolean {
-        this._errorSummary.push('email error');
-        return true;
-    }
     requiredHandler(value: valueType, paramsModel: Decortors.RequiredModel): boolean {
         if (!value) {
             if (typeof value === 'string' && paramsModel.allowEmpty && value === '') {
@@ -41,4 +36,8 @@ export class DefaultProvider implements IValidateProvider {
         return true;
     }
 
+    emailHandler(value: valueType, paramsModel: Decortors.RequiredModel): boolean {
+        this._errorSummary.push('email error');
+        return true;
+    }
 }

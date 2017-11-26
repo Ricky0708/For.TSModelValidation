@@ -28,5 +28,7 @@ export module Decortors {
         let resultModel = Reflect.metadata(emailMetadataKey, model);
         return resultModel;
     }
-  
+    export function logMethod(target: any, key: any, descriptor: any) {
+        return descriptor;
+    }
 }
