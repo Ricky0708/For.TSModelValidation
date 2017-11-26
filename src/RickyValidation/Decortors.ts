@@ -16,7 +16,7 @@ export module Decortors {
      * @param model 參數
      */
     export function required(model: RequiredModel = { errorMsg: 'Can\'t emtpy', allowEmpty: false }) {
-        let resultModel = Reflect.metadata('required', model); //需與provider handler前命名一致，因為呼叫是使用 (name + 'handler')()
+        let resultModel = Reflect.metadata('required', model); // 需與provider handler前命名一致，因為呼叫是使用 (name + 'handler')()
         return resultModel;
     }
     /**
@@ -24,7 +24,7 @@ export module Decortors {
      * @param model 參數
      */
     export function email(model: _baseDecortorsModel = { errorMsg: 'Can\'t emtpy' }) {
-        let resultModel = Reflect.metadata('email', model); //需與provider handler前命名一致，因為呼叫是使用 (name + 'handler')()
+        let resultModel = Reflect.metadata('email', model); // 需與provider handler前命名一致，因為呼叫是使用 (name + 'handler')()
         return resultModel;
     }
 }
