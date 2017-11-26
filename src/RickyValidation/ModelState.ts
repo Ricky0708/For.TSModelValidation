@@ -20,37 +20,42 @@ export class ModelState<T> {
      * 進行驗證
      * @param model 驗證的實體
      */
-    public isValid(model: T): boolean {
+    public isValid(model: object): boolean {
         // 重新放入標準模型內，防止model是由 any進入(在JS中的弱型別會失去模型的標籤)
         Object.assign(this._validModel, model);
-
-        // 驗證property
-        let protokeys: Array<string> = Object.getPrototypeOf(this._validModel);
-        for (var protoKey in protokeys) {
-            if (protoKey !== 'isValid' && !this.isValidate(this._validModel, protoKey)) { this._isValid = false; }
-        }
-
-        /// 驗證field
-        let propertyKeys: Array<string> = Object.getOwnPropertyNames(this._validModel);
-        for (var propertykey in propertyKeys) {
-            if (propertykey !== 'isValid' && !this.isValidate(this._validModel, propertyKeys[propertykey])) {
-                this._isValid = false;
+        let p = (obj: object) => {
+            for (let key in obj) {
+                if (!key.startsWith('_')) {
+                    switch (typeof obj[key]) {
+                        case 'object':
+                            if (obj[key] instanceof Array) {
+                                obj[key].forEach((x: object) => { p(x) });
+                                if (!this.valid(obj, key)) { this._isValid = false; }
+                            } else {
+                                p(obj[key]);
+                            }
+                            break;
+                        default:
+                            if (!this.valid(obj, key)) { this._isValid = false; }
+                            break;
+                    }
+                }
             }
-        }
+        };
+        p(<Object>this._validModel);
         return this._isValid;
     }
     public getErrorSummary(): string[] {
         return this._provider.errorSummary;
     }
     // 工廠驗證
-    private isValidate(target: T, propertyKey: string): boolean {
-
+    private valid(target: object, propertyKey: string): boolean {
         let result: boolean = true;
         let factory = Reflect.getMetadataKeys(target, propertyKey);
         for (let decortor in factory) {
             if (factory[decortor]) {
                 let metaData = this.getMetadata(factory[decortor], target, propertyKey);
-                let value: valueType = Reflect.get(<Object> target, propertyKey);
+                let value: valueType = Reflect.get(<Object>target, propertyKey);
                 if (metaData) {
                     if (!this._provider[factory[decortor] + 'Handler'](value, metaData)) { result = false; }
                 }
@@ -60,7 +65,7 @@ export class ModelState<T> {
     }
 
     // 取得標籤及內容
-    private getMetadata = (metadataKey: string, target: T, propertyKey: string) => {
+    private getMetadata = (metadataKey: string, target: object, propertyKey: string) => {
         let metaData =
             Reflect.getMetadata(metadataKey, target, propertyKey);
         return metaData;

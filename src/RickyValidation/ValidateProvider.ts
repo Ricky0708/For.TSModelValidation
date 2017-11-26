@@ -22,14 +22,14 @@ export class DefaultProvider implements IValidateProvider {
     }
 
     requiredHandler(value: valueType, paramsModel: Decortors.RequiredModel): boolean {
-        if (!value) {
+        if (!value || (value instanceof Array && value.length === 0)) {
             if (typeof value === 'string' && paramsModel.allowEmpty && value === '') {
                 return true;
             }
             if (typeof paramsModel.errorMsg === 'function') {
-                this._errorSummary.push(<string> paramsModel.errorMsg());
+                this._errorSummary.push(<string>paramsModel.errorMsg());
             } else {
-                this._errorSummary.push(<string> paramsModel.errorMsg);
+                this._errorSummary.push(<string>paramsModel.errorMsg);
             }
             return false;
         }

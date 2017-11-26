@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "dependencies": {
     "@types/react-redux": "^5.0.13",
