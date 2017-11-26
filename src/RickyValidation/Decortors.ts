@@ -23,7 +23,7 @@ export module Decortors {
      * email裝飾器
      * @param model 參數
      */
-    export function email(model: _baseDecortorsModel = { errorMsg: 'Can\'t emtpy' }) {
+    export function email(model: string = 'Can\'t emtpy email' ) {
         let resultModel = Reflect.metadata('email', model); // 需與provider handler前命名一致，因為呼叫是使用 (name + 'handler')()
         return resultModel;
     }

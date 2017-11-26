@@ -9,7 +9,7 @@ export interface IValidateProvider {
     readonly errorSummary: string[];
 
     requiredHandler(value: valueType, paramsModel: Decortors.RequiredModel): boolean;
-    emailHandler(value: valueType, paramsModel: Decortors.RequiredModel): boolean;
+    emailHandler(value: valueType, errorMsg: string): boolean;
 }
 /**
  * 預設驗證的提供者
@@ -36,8 +36,8 @@ export class DefaultProvider implements IValidateProvider {
         return true;
     }
 
-    emailHandler(value: valueType, paramsModel: Decortors.RequiredModel): boolean {
-        this._errorSummary.push('email error');
-        return true;
+    emailHandler(value: valueType, errorMsg: string): boolean {
+        this._errorSummary.push(errorMsg);
+        return false;
     }
 }

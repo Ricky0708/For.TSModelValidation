@@ -19,7 +19,7 @@ export class Model {
     public set name(v: string) { this._name = v; }
 
     private _email: string;
-    // @Decortors.email()
+    @Decortors.email()
     public get email(): string { return this._email; }
     public set email(v: string) { this._email = v; }
 
